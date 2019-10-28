@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        body {
+            background: #eeaa44;
+        }
+
+        ul {
+            position: relative;
+            top: 20vh;
+            left: 10vh;
+            width: 90vw;
+            height: 80vh;
+            transform-style: preserve-3d;
+            transform: rotateX(-10deg);
+            transform-origin: 30vw 0vw 50vw;
+        }
+
+        .vid {
+            width: 60vw;
+            height: 60vh;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .vid3 {
+            transform-origin: left;
+            transform: rotateY(-120deg);
+        }
+
+        .vid2 {
+            transform-origin: right;
+            transform: rotateY(120deg);
+        }
+
+        .vid6 {
+            transform-origin: right;
+            transform: translateZ(103vw) rotateY(-120deg);
+        }
+
+        .vid4 {
+            transform-origin: left;
+            transform: translateZ(103vw) rotateY(120deg);
+        }
+
+        .vid5 {
+            transform: translateZ(103vw);
+        }
+
+        .vid1 video {
+            transform: translateY(-13%) translateX(-40%);
+        }
+
+        .vid2 video {
+            transform: translateY(-13%) translateX(-43%);
+        }
+
+        .vid3 video {
+            transform: translateY(-13%) translateX(-43%);
+        }
+
+        .vid6 video {
+            transform: translateY(-13%) translateX(-40%);
+        }
+
+        .vid5 video {
+            transform: translateY(-13%) translateX(-43%);
+        }
+
+        .vid4 video {
+            transform: translateY(-13%) translateX(-43%);
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li class="vid1 vid"><video src="./_01.mkv" loop muted></video></li>
+        <li class="vid2 vid"><video src="./_02.mp4" loop muted></video></li>
+        <li class="vid3 vid"><video src="./_03.mkv" loop muted></video></li>
+        <li class="vid4 vid"><video src="./_04.mkv" loop muted></video></li>
+        <li class="vid5 vid"><video src="./_05.mp4" loop muted></video></li>
+        <li class="vid6 vid"><video src="./_06.mp4" loop muted></video></li>
+    </ul>
+
+    <script>
+        let ul = document.getElementsByTagName('ul')[0];
+        let vid = document.getElementsByClassName('vid');
+        let video = document.getElementsByTagName('video');
+        let i = 0;
+        [...vid].forEach((item, index) => {
+            item.ontouchend = function () {
+                video[index].play();
+            }
+        })
+        setInterval(() => {
+            i++
+            ul.style.transform = `rotateX(-10deg) rotateY(${i}deg)`
+            if (i >= 360) {
+                i = 0
+            }
+        }, 50);
+    </script>
+</body>
+
+</html>
