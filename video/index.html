@@ -13,18 +13,35 @@
         }
 
         body {
-            background: #eeaa44;
+            background: rgba(69, 150, 72, 0.8);
         }
 
         ul {
-            position: relative;
-            top: 20vh;
-            left: 10vh;
-            width: 90vw;
-            height: 80vh;
+            margin-top: 20vh;
+            margin-left: 20vw;
             transform-style: preserve-3d;
-            transform: rotateX(-10deg);
-            transform-origin: 30vw 0vw 50vw;
+            transform-origin: 30vw 0vw 51vw;
+        }
+
+        .none {
+            display: none;
+        }
+
+        #start {
+            overflow: hidden;
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background: url('./Temp/i_01.jpeg') no-repeat;
+            background-size: cover;
+            opacity: 1;
+            transition: all .5s;
+            z-index: 999;
+        }
+
+        #start video {
+            height: 135%;
+            transform: translateY(-13%) translateX(-40%);
         }
 
         .vid {
@@ -58,6 +75,10 @@
             transform: translateZ(103vw);
         }
 
+        video {
+            height: 135%;
+        }
+
         .vid1 video {
             transform: translateY(-13%) translateX(-40%);
         }
@@ -85,32 +106,65 @@
 </head>
 
 <body>
-    <ul>
-        <li class="vid1 vid"><video src="./_01.mkv" loop muted></video></li>
+    <div id="start"></div>
+    <ul class="none">
+        <li class="vid1 vid"><video src="./_04.mkv" loop muted></video></li>
         <li class="vid2 vid"><video src="./_02.mp4" loop muted></video></li>
-        <li class="vid3 vid"><video src="./_03.mkv" loop muted></video></li>
-        <li class="vid4 vid"><video src="./_04.mkv" loop muted></video></li>
-        <li class="vid5 vid"><video src="./_05.mp4" loop muted></video></li>
+        <li class="vid3 vid"><video src="./_05.mp4" loop muted></video></li>
+        <li class="vid4 vid"><video src="./_03.mkv" loop muted></video></li>
+        <li class="vid5 vid"><video src="./_01.mkv" loop muted></video></li>
         <li class="vid6 vid"><video src="./_06.mp4" loop muted></video></li>
     </ul>
-
     <script>
+        let start = document.getElementById('start')
         let ul = document.getElementsByTagName('ul')[0];
         let vid = document.getElementsByClassName('vid');
-        let video = document.getElementsByTagName('video');
-        let i = 0;
+        let video = document.querySelectorAll('video');
+            let a = 0;
+        let time = null;
+        let i = 0,
+            u = 0;
+        start.onclick = function () {
+            clearInterval(timer)
+            start.style.opacity = 0
+            addEventListener('transitionend', function () {
+                start.classList.add('none')
+            }, false)
+            ul.classList.remove('none');
+                var timer = setInterval(() => {
+                    u++
+                    ul.style.transform = `rotateX(-${u}deg)`;
+                    if (u >= 30) {
+                        clearInterval(timer);
+                        a = 1
+                    }
+                    if (a == 1) {
+                        time = setInterval(() => {
+                            i++
+                            ul.style.transform = `rotateX(-30deg) rotateY(${i}deg)`
+                            if (i >= 360) {
+                                i = 0
+                            }
+                        }, 50);
+                    }
+                }, 50);
+                [...vid].forEach((item, index) => {
+                    video[index].play();
+                })
+            c = 1;
+            start.innerHTML = ''
+        };
         [...vid].forEach((item, index) => {
-            item.ontouchend = function () {
-                video[index].play();
+            item.onclick = function () {
+                start.innerHTML = `<video src="${video[index].attributes.src.value}" loop></video>`
+                clearInterval(time)
+                start.classList.remove('none')
+                ul.classList.add('none')
+                start.style.opacity = 1
+                let t = document.querySelector('#start video')
+                t.play()
             }
-        })
-        setInterval(() => {
-            i++
-            ul.style.transform = `rotateX(-10deg) rotateY(${i}deg)`
-            if (i >= 360) {
-                i = 0
-            }
-        }, 50);
+        });
     </script>
 </body>
 
