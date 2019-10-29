@@ -35,13 +35,16 @@
             background: url('./Temp/i_01.jpeg') no-repeat;
             background-size: cover;
             opacity: 1;
-            transition: all .5s;
+            transition: all 1s;
             z-index: 999;
         }
 
         #start video {
             height: 135%;
             transform: translateY(-13%) translateX(-40%);
+        }
+        .a{
+            background: rgba(69, 150, 72, 0.8)!important;
         }
 
         .vid {
@@ -125,7 +128,8 @@
         let i = 0,
             u = 0;
         start.onclick = function () {
-            clearInterval(timer)
+            start.classList.add('a')
+            clearInterval(time)
             start.style.opacity = 0
             addEventListener('transitionend', function () {
                 start.classList.add('none')
