@@ -17,10 +17,13 @@
         }
 
         ul {
+            position: absolute;
+            top: 0;
             margin-top: 20vh;
             margin-left: 20vw;
             transform-style: preserve-3d;
             transform-origin: 30vw 0vw 51vw;
+            transform: rotateX(-30deg);
         }
 
         .none {
@@ -28,23 +31,19 @@
         }
 
         #start {
-            overflow: hidden;
             position: absolute;
             width: 100vw;
             height: 100vh;
             background: url('./Temp/i_01.jpeg') no-repeat;
             background-size: cover;
             opacity: 1;
-            transition: all .5s;
+            transition: opacity 1s;
             z-index: 999;
         }
 
         #start video {
             height: 135%;
             transform: translateY(-13%) translateX(-40%);
-        }
-        .a{
-            background: rgba(69, 150, 72, 0.8)!important;
         }
 
         .vid {
@@ -123,50 +122,59 @@
         let ul = document.getElementsByTagName('ul')[0];
         let vid = document.getElementsByClassName('vid');
         let video = document.querySelectorAll('video');
-            let a = 0;
+        let a = 0;
         let time = null;
+        let timer = null;
         let i = 0,
             u = 0;
-        start.onclick = function () {
-            start.classList.add('a')
+        start.ontouchstart = function () {
             clearInterval(time)
+            clearInterval(timer)
             start.style.opacity = 0
-            addEventListener('transitionend', function () {
+                ul.classList.remove('none');
+            ontransitionend = function (e) {
                 start.classList.add('none')
-            }, false)
-            ul.classList.remove('none');
-                var timer = setInterval(() => {
-                    u++
-                    ul.style.transform = `rotateX(-${u}deg)`;
-                    if (u >= 30) {
-                        clearInterval(timer);
-                        a = 1
-                    }
-                    if (a == 1) {
-                        time = setInterval(() => {
-                            i++
-                            ul.style.transform = `rotateX(-30deg) rotateY(${i}deg)`
-                            if (i >= 360) {
-                                i = 0
-                            }
-                        }, 50);
-                    }
-                }, 50);
-                [...vid].forEach((item, index) => {
-                    video[index].play();
-                })
-            c = 1;
+            }
+                timer = setInterval(() => {
+                u++
+                ul.style.transform = `rotateX(-${u}deg)`;
+                if (u >= 30) {
+                    clearInterval(timer);
+                    a = 1
+                }
+                if (a == 1) {
+                    time = setInterval(() => {
+                        i++
+                        ul.style.transform = `rotateX(-30deg) rotateY(${i}deg)`
+                        if (i >= 360) {
+                            i = 0
+                        }
+                    }, 50);
+                }
+            }, 50);
+            [...vid].forEach((item, index) => {
+                video[index].play();
+            })
             start.innerHTML = ''
         };
         [...vid].forEach((item, index) => {
-            item.onclick = function () {
-                start.innerHTML = `<video src="${video[index].attributes.src.value}" loop></video>`
-                clearInterval(time)
-                start.classList.remove('none')
-                ul.classList.add('none')
-                start.style.opacity = 1
-                let t = document.querySelector('#start video')
-                t.play()
+            let c = 1;
+            item.ontouchend = function () {
+                    c = 0
+                setTimeout(() => {
+                    c = 1;
+                }, 300)
+            }
+            item.ontouchstart = function () {
+                if (c == 0) {
+                    start.innerHTML = `<video src="${video[index].attributes.src.value}" loop></video>`
+                    clearInterval(time)
+                    start.classList.remove('none')
+                    ul.classList.add('none')
+                    start.style.opacity = 1
+                    let t = document.querySelector('#start video')
+                    t.play()
+                }
             }
         });
     </script>
